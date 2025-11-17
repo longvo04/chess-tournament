@@ -169,52 +169,8 @@ class MLAgent(Agent):
         return moves[best_idx]
     
     def _evaluate_position(self, board: chess.Board) -> float:
-        """Evaluate position using various heuristics from White's perspective"""
-        if board.is_checkmate():
-            # If it's white's turn and checkmate, white lost (negative)
-            # If it's black's turn and checkmate, black lost (positive)
-            return -10000 if board.turn == chess.WHITE else 10000
-        if board.is_stalemate() or board.is_insufficient_material():
-            return 0
-        
-        score = 0
-        
-        # Material count
-        for piece_type in self.PIECE_VALUES:
-            score += len(board.pieces(piece_type, chess.WHITE)) * self.PIECE_VALUES[piece_type]
-            score -= len(board.pieces(piece_type, chess.BLACK)) * self.PIECE_VALUES[piece_type]
-        
-        # Mobility (number of legal moves for current player)
-        mobility = len(list(board.legal_moves))
-        # More mobility is good for the player whose turn it is
-        if board.turn == chess.WHITE:
-            score += mobility * 0.1
-        else:
-            score -= mobility * 0.1
-        
-        # Center control
-        center_squares = [chess.E4, chess.E5, chess.D4, chess.D5]
-        for square in center_squares:
-            piece = board.piece_at(square)
-            if piece:
-                if piece.color == chess.WHITE:
-                    score += 0.3
-                else:
-                    score -= 0.3
-        
-        # King safety (penalize exposed king in middlegame)
-        if len(board.pieces(chess.QUEEN, chess.WHITE)) > 0 or len(board.pieces(chess.QUEEN, chess.BLACK)) > 0:
-            white_king_square = board.king(chess.WHITE)
-            black_king_square = board.king(chess.BLACK)
-            
-            # Check if king is in corner (safer)
-            if white_king_square in [chess.A1, chess.H1, chess.A2, chess.B1, chess.G1, chess.H2]:
-                score += 0.5
-            if black_king_square in [chess.A8, chess.H8, chess.A7, chess.B8, chess.G8, chess.H7]:
-                score -= 0.5
-        
-        # Always return from White's perspective (positive = good for white)
-        return score
+        """Place holder, add model later"""
+        return 1
 
 
 def create_agent(agent_type: str, name: str = None) -> Agent:
