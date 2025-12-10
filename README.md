@@ -1,168 +1,259 @@
-# Chess Tournament Program
+# Chess Tournament - Game Playing AI
 
-A Python-based chess tournament system with multiple AI agents, live tournament tracking, and comprehensive replay functionality.
+Hệ thống giải đấu cờ vua với các AI agents sử dụng thuật toán Minimax và Machine Learning.
 
-## Features
+> **Bài tập lớn môn Trí tuệ Nhân tạo - HCMUT**
 
-- **Multiple AI Agents**: 
-  - **Random Agent**: Makes random legal moves
-  - **Minimax Agent**: Uses minimax algorithm with alpha-beta pruning (depth 3-5)
-  - **ML Agent**: Machine learning-based agent with advanced position evaluation heuristics
-  
-- **Tournament Management**: 
-  - Horizontal side-by-side agent selection interface
-  - Customizable number of matches
-  - UI remains responsive during tournaments using threading
-  
-- **Live Tournament Display**:
-  - Real-time statistics showing both agents side-by-side
-  - Live statistics panel showing:
-    - Current match progress
-    - Win/Loss/Draw counts for each agent
-    - Win rates calculated in real-time
-  
-- **Tournament End Summary**:
-  - Complete statistics for both agents
-  - Time taken for tournament
-  
-- **Data Persistence**: 
-  - Tournaments saved in organized folders
-  - **Enhanced file naming**: `game1_winner.txt` format showing winner/draw
-  - FEN notation AND UCI moves for every board state
-  - Human-readable result summaries
-  
-- **Comprehensive Replay System**:
-  - Browse all past tournaments
-  - View tournament summaries with statistics
-  - Select individual games for detailed replay
-  - Playback controls with icon-based UI:
-    - Previous/Next move navigation
-    - Play/Pause button (dynamically switches)
-    - Speed slider (0.5x to 5.0x) with real-time adjustment
-    - **Keyboard shortcuts** with visual icon indicators
+## 📋 Mục tiêu dự án
 
-## Requirements
+- Hiện thực game playing agent cho trò chơi cờ vua (đối kháng)
+- So sánh hiệu quả giữa thuật toán Minimax và Machine Learning
+- Đáp ứng yêu cầu:
+  - ✅ Agent chơi đúng luật cờ vua
+  - ✅ Minimax thắng Random ≥ 90%
+  - ✅ Machine Learning thắng Random ≥ 60%
 
-- Python 3.8 or higher
-- pygame 2.6.1
-- chess (python-chess) 1.11.2
-- numpy 2.3.4
+## 🎮 Tính năng
 
-## Installation
+### AI Agents
 
-### Quick Start
+| Agent | Mô tả | Win Rate vs Random |
+|-------|-------|-------------------|
+| **Random** | Chọn nước đi ngẫu nhiên | - |
+| **Minimax** | Alpha-beta pruning, depth 3 | ~100% |
+| **ML (Random Forest)** | Machine Learning với 300 trees | ~70% |
+
+### Giao diện đồ họa
+
+- **Tournament Management**: Tạo và quản lý giải đấu
+- **Live Statistics**: Theo dõi kết quả realtime
+- **Replay System**: Xem lại các ván đấu với playback controls
+
+## 🚀 Cài đặt
+
+### Yêu cầu
+
+- Python 3.8+
+- Windows/Linux/macOS
+
+### Cài đặt dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+### Dependencies
+
+```
+chess==1.11.2
+numpy==2.3.4
+pygame==2.6.1
+scikit-learn>=1.3.0
+```
+
+## 📖 Hướng dẫn sử dụng
+
+### Chạy ứng dụng chính
+
+```bash
 python main.py
 ```
 
-## Usage Guide
+### Train lại ML Model (tuỳ chọn)
 
-### Starting a New Tournament
-
-1. Click "New Tournament" from the main menu
-2. Select **Agent 1** and **Agent 2** from the horizontal dropdown menus
-   - Hover over dropdown options to see grey highlighting
-3. Enter the number of matches (default: 10)
-4. Optionally enter a tournament name
-5. Click "Start" to begin
-
-The tournament will run automatically in the background:
-- **UI remains responsive** during execution (threaded)
-- Live statistics displayed for both agents
-- Progress through all matches
-- "Running..." status indicator
-
-### Viewing Tournament Results
-
-After a tournament completes, you'll see:
-- Total matches played
-- Time taken
-- Complete statistics for both agents (wins, win rate, losses)
-- A colored progress bar showing win/draw/loss distribution
-
-### Replaying Past Tournaments
-
-1. Click "Replay Tournament" from the main menu
-2. Select a tournament from the scrollable list
-3. View the tournament summary and statistics
-4. Select a specific game to replay (winner/draw shown in list)
-5. Use the controls to navigate through the game:
-
-**Mouse Controls:**
-- **Speed Slider** (left): Adjust playback speed (0.5x - 5.0x)
-- **◄ Prev**: Go to previous move
-- **▶ Play** / **⏸ Pause**: Auto-play the game (button changes dynamically)
-- **► Next**: Go to next move
-
-**Keyboard Shortcuts** (with visual icons):
-- **← →** : Previous/Next move
-- **Space**: Play/Pause toggle
-- **↑ ↓** (or **+** / **-**): Increase/Decrease speed
-
-**Visual Features:**
-- Move highlighting: Yellow overlay shows start/end squares and path
-- Turn indicator: Colored text (blue for white, red for black)
-- Game end display: "Checkmate!" (green) or "Draw!" (orange) at final move
-
-## Tournament Data Structure
-
-Tournaments are saved in the `tournaments/` directory with the following structure:
-
-```
-tournaments/
-└── tournament_name_timestamp/
-    ├── result.txt              # Tournament summary
-    ├── game1_Minimax.txt      # First game (Minimax won)
-    ├── game2_draw.txt         # Second game (draw)
-    ├── game3_Random.txt       # Third game (Random won)
-    └── ...
+```bash
+python ml_training.py
 ```
 
-**File Naming:**
-- Format: `game{number}_{winner}.txt`
-- Winner is the agent name or "draw"
-- Numbering starts from 1
+### Test tỉ lệ thắng
 
-**Each game file contains:**
-- Result (winner or draw)
-- White and Black player names
-- **Moves (UCI)**: Standard chess notation (e.g., "e2e4", "g1f3")
-- **Moves (FEN)**: Complete board states for each position
+```bash
+# Test với 100 games (mặc định)
+python test_agents.py
 
-## AI Agent Details
+# Test với số games tuỳ chọn
+python test_agents.py 50
+```
 
-### Random Agent
-- Makes completely random moves from all legal options
-- Fast execution
-- Useful as a baseline for testing other agents
+## 🧠 Chi tiết các AI Agents
 
-### Minimax Agent
-- Implements minimax algorithm with **alpha-beta pruning**
-- **Configurable depth** (default: 3 ply)
-- **Proper evaluation** from White's perspective:
-  - White maximizes score, Black minimizes score
-  - Fixed alpha-beta pruning logic for optimal play
-- Material-based evaluation:
-  - Pawn: 100
-  - Knight: 320
-  - Bishop: 330
-  - Rook: 500
-  - Queen: 900
-  - King: 20000
+### 1. Random Agent
 
-### ML Agent
-- Advanced heuristic-based position evaluation
-- Considers multiple strategic factors:
-  - **Material count**: Traditional piece values
-  - **Piece mobility**: Number of legal moves available
-  - **Center control**: Bonus for pieces in central squares (e4, e5, d4, d5)
-  - **King safety**: Evaluates king position in opening/middlegame
-- **Exploration factor**: Adds randomness for variety (temperature = 0.3)
-- **Proper perspective handling**: Always evaluates from White's viewpoint
-- More sophisticated strategic play than pure minimax
+Agent cơ bản nhất, chọn ngẫu nhiên từ các nước đi hợp lệ.
 
-## License
+```python
+def get_move(self, board):
+    return random.choice(list(board.legal_moves))
+```
 
-This project is provided as-is for educational purposes.
+### 2. Minimax Agent (75% điểm BTL)
+
+Sử dụng thuật toán **Minimax với Alpha-Beta Pruning**:
+
+- **Độ sâu**: 3 ply (có thể điều chỉnh)
+- **Evaluation function**: Đánh giá từ góc nhìn White
+- **Alpha-Beta Pruning**: Cắt tỉa để tăng tốc
+
+**Bảng giá trị quân cờ:**
+
+| Quân | Giá trị |
+|------|---------|
+| Pawn | 100 |
+| Knight | 320 |
+| Bishop | 330 |
+| Rook | 500 |
+| Queen | 900 |
+| King | 20000 |
+
+**Pseudocode:**
+
+```
+function minimax(board, depth, alpha, beta, maximizing):
+    if depth == 0 or game_over:
+        return evaluate(board)
+    
+    if maximizing:
+        maxEval = -∞
+        for each move:
+            eval = minimax(board, depth-1, alpha, beta, false)
+            maxEval = max(maxEval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break  # Cắt tỉa
+        return maxEval
+    else:
+        minEval = +∞
+        for each move:
+            eval = minimax(board, depth-1, alpha, beta, true)
+            minEval = min(minEval, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break  # Cắt tỉa
+        return minEval
+```
+
+### 3. ML Agent - Random Forest (25% điểm BTL)
+
+Sử dụng **Random Forest Regressor** được train từ self-play data.
+
+#### Feature Engineering (21 features)
+
+| # | Feature | Mô tả |
+|---|---------|-------|
+| 1-6 | Material Difference | Chênh lệch số quân (Pawn, Knight, Bishop, Rook, Queen, King) |
+| 7-8 | Total Material | Tổng giá trị quân cờ mỗi bên |
+| 9 | Mobility | Số nước đi hợp lệ hiện tại |
+| 10-11 | Center Control | Kiểm soát trung tâm (e4, e5, d4, d5) và vùng mở rộng |
+| 12-15 | Castling Rights | Quyền nhập thành (4 features) |
+| 16-17 | King Safety | Vị trí an toàn của vua |
+| 18-19 | Pawn Structure | Cấu trúc tốt |
+| 20 | Is Check | Đang bị chiếu? |
+| 21 | Turn Indicator | Lượt đi (White = 1, Black = -1) |
+
+#### Training Process
+
+```
+1. Generate Self-Play Data:
+   - 3000 random games
+   - 2000 strategic games (with simple heuristic)
+   - Total: ~650,000 positions
+
+2. Train Random Forest:
+   - n_estimators: 300
+   - max_depth: 20
+   - R² score: ~0.37
+
+3. Inference:
+   - Batch prediction cho tất cả nước đi
+   - Chọn nước có score cao nhất (White) hoặc thấp nhất (Black)
+```
+
+#### Tối ưu tốc độ
+
+- **Batch Prediction**: Gom tất cả features và predict 1 lần
+- **Feature tối ưu**: Loại bỏ tính toán phức tạp
+- **Kết quả**: ~100x nhanh hơn so với predict từng nước
+
+## 📊 Kết quả đánh giá
+
+### Test với 100 games
+
+| Agent | Wins | Losses | Draws | Win Rate | Yêu cầu | Status |
+|-------|------|--------|-------|----------|---------|--------|
+| **Minimax** vs Random | 100 | 0 | 0 | **100%** | ≥90% | ✅ PASS |
+| **ML** vs Random | 70 | 2 | 28 | **70%** | ≥60% | ✅ PASS |
+
+### Phân tích
+
+- **Minimax**: Hiệu quả rất cao nhờ tìm kiếm có chiều sâu
+- **ML Agent**: Học được patterns cơ bản từ self-play data, đủ để thắng Random một cách ổn định
+
+## 📁 Cấu trúc dự án
+
+```
+chess-tournament/
+├── agents.py           # Định nghĩa các AI agents
+├── main.py             # Ứng dụng chính với GUI
+├── tournament.py       # Quản lý giải đấu
+├── ui_components.py    # UI components
+├── ml_training.py      # Script train ML model
+├── test_agents.py      # Script test tỉ lệ thắng
+├── requirements.txt    # Dependencies
+├── README.md           # File này
+├── ml_models/
+│   └── chess_rf_model.pkl  # Trained Random Forest model
+├── assets/
+│   └── img/            # Hình ảnh quân cờ và UI
+└── tournaments/        # Lưu kết quả giải đấu
+    └── <tournament_name>/
+        ├── result.txt
+        ├── game1_Minimax.txt
+        └── ...
+```
+
+## 🎯 Độ phức tạp của trò chơi
+
+Cờ vua đáp ứng yêu cầu BTL:
+
+- **Hệ số nhánh trung bình**: ~35 nước đi/lượt
+- **Độ sâu cây game**: 40-50 nước mỗi bên (~80-100 ply) > 30 ✅
+- **Không gian trạng thái**: ~10^44 vị trí có thể
+
+## 🔧 Cấu hình nâng cao
+
+### Thay đổi độ sâu Minimax
+
+Trong `agents.py`:
+
+```python
+def create_agent(agent_type: str, name: str = None) -> Agent:
+    elif agent_type.lower() == "minimax":
+        return MinimaxAgent(name or "Minimax", depth=4)  # Thay đổi depth
+```
+
+### Train lại ML Model với tham số khác
+
+Trong `ml_training.py`:
+
+```python
+train_and_save(
+    num_random_games=5000,      # Tăng số games
+    num_strategic_games=3000,   
+    n_estimators=500,           # Nhiều trees hơn
+    max_depth=25                # Sâu hơn
+)
+```
+
+## 📝 Ghi chú
+
+- Model ML đã được train sẵn trong `ml_models/chess_rf_model.pkl`
+- Nếu muốn train lại, chạy `python ml_training.py` (mất ~2-3 phút)
+- Kết quả giải đấu được lưu tự động trong thư mục `tournaments/`
+
+## 👥 Thành viên nhóm
+
+- [Thêm thông tin thành viên ở đây]
+
+## 📄 License
+
+Dự án được phát triển cho mục đích học tập tại HCMUT.
