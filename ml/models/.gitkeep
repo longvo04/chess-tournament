@@ -1,0 +1,4 @@
+# This directory stores trained ML models
+# Files:
+#   - chess_model.pth: PyTorch model
+#   - simple_model.npz: Simple numpy model (fallback)

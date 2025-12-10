@@ -1,6 +1,19 @@
 # Python
 __pycache__/
+*.pyc
+*.pyo
 venv/
+.venv/
+*.egg-info/
+
+# Data files (too large for git)
+data/pgn/*.pgn
+data/pgn/*.zst
+data/processed/*.npz
+
+# ML Models (can be retrained)
+ml/models/*.pth
+ml/models/*.npz
 
 # Tournament data
 tournaments/
@@ -15,3 +28,6 @@ tournaments/
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log

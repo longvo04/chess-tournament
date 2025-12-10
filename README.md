@@ -1,168 +1,244 @@
-# Chess Tournament Program
+# ♟️ Chess Tournament - AI Game Playing
 
-A Python-based chess tournament system with multiple AI agents, live tournament tracking, and comprehensive replay functionality.
+Hệ thống thi đấu cờ vua với các AI agents sử dụng **Minimax** và **Machine Learning**.
 
-## Features
+> **Bài tập lớn môn Trí tuệ Nhân tạo (AI) - HCMUT**
 
-- **Multiple AI Agents**: 
-  - **Random Agent**: Makes random legal moves
-  - **Minimax Agent**: Uses minimax algorithm with alpha-beta pruning (depth 3-5)
-  - **ML Agent**: Machine learning-based agent with advanced position evaluation heuristics
-  
-- **Tournament Management**: 
-  - Horizontal side-by-side agent selection interface
-  - Customizable number of matches
-  - UI remains responsive during tournaments using threading
-  
-- **Live Tournament Display**:
-  - Real-time statistics showing both agents side-by-side
-  - Live statistics panel showing:
-    - Current match progress
-    - Win/Loss/Draw counts for each agent
-    - Win rates calculated in real-time
-  
-- **Tournament End Summary**:
-  - Complete statistics for both agents
-  - Time taken for tournament
-  
-- **Data Persistence**: 
-  - Tournaments saved in organized folders
-  - **Enhanced file naming**: `game1_winner.txt` format showing winner/draw
-  - FEN notation AND UCI moves for every board state
-  - Human-readable result summaries
-  
-- **Comprehensive Replay System**:
-  - Browse all past tournaments
-  - View tournament summaries with statistics
-  - Select individual games for detailed replay
-  - Playback controls with icon-based UI:
-    - Previous/Next move navigation
-    - Play/Pause button (dynamically switches)
-    - Speed slider (0.5x to 5.0x) with real-time adjustment
-    - **Keyboard shortcuts** with visual icon indicators
+---
 
-## Requirements
+## 📋 Mục tiêu dự án
 
-- Python 3.8 or higher
-- pygame 2.6.1
-- chess (python-chess) 1.11.2
-- numpy 2.3.4
+- Hiện thực game playing agent cho trò chơi cờ vua (đối kháng)
+- Sử dụng giải thuật **Minimax với Alpha-Beta Pruning**
+- Sử dụng **Machine Learning** (Neural Network) học từ Lichess database
+- Đáp ứng yêu cầu:
+  - ✅ Minimax thắng Random ≥ 90%
+  - ✅ ML Agent thắng Random ≥ 60%
 
-## Installation
+---
 
-### Quick Start
+## 🎮 Tính năng
+
+### AI Agents
+
+| Agent | Mô tả | Thuật toán |
+|-------|-------|------------|
+| **Random** | Chơi ngẫu nhiên | Random choice |
+| **Minimax** | Tìm kiếm cây trò chơi | Minimax + Alpha-Beta Pruning (depth=3) |
+| **ML** | Học từ 563K positions | Neural Network (PyTorch) |
+
+### Giao diện
+
+- 🎯 Chọn agents và số trận đấu
+- 📊 Hiển thị thống kê real-time
+- 🔄 Replay các ván đã đấu
+- ⌨️ Hỗ trợ phím tắt
+
+---
+
+## 🗂️ Cấu trúc dự án
+
+```
+chess-tournament/
+├── main.py                 # Ứng dụng chính (GUI)
+├── agents.py               # Định nghĩa các AI agents
+├── tournament.py           # Quản lý giải đấu
+├── ui_components.py        # Các component giao diện
+├── setup_assets.py         # Setup hình ảnh quân cờ
+├── requirements.txt        # Dependencies
+│
+├── ml/                     # 🤖 Machine Learning Module
+│   ├── __init__.py
+│   ├── data_processor.py   # Xử lý dữ liệu PGN từ Lichess
+│   ├── model.py            # Neural Network models
+│   ├── train.py            # Script training
+│   └── models/             # Trained models
+│       ├── chess_model.pth     # PyTorch model (90% accuracy)
+│       └── simple_model.npz    # Backup model
+│
+├── data/                   # 📦 Dữ liệu
+│   ├── pgn/                # File PGN từ Lichess
+│   └── processed/          # Dataset đã xử lý
+│
+├── assets/                 # 🎨 Hình ảnh
+│   └── img/chess_pieces/   # Hình các quân cờ
+│
+└── tournaments/            # 📁 Kết quả các giải đấu
+```
+
+---
+
+## 🚀 Cài đặt và Chạy
+
+### 1. Cài đặt dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+### 2. Setup hình ảnh (lần đầu)
+
+```bash
+python setup_assets.py
+```
+
+### 3. Chạy ứng dụng
+
+```bash
 python main.py
 ```
 
-## Usage Guide
+---
 
-### Starting a New Tournament
+## 🤖 Training ML Agent
 
-1. Click "New Tournament" from the main menu
-2. Select **Agent 1** and **Agent 2** from the horizontal dropdown menus
-   - Hover over dropdown options to see grey highlighting
-3. Enter the number of matches (default: 10)
-4. Optionally enter a tournament name
-5. Click "Start" to begin
+### Bước 1: Chuẩn bị dữ liệu
 
-The tournament will run automatically in the background:
-- **UI remains responsive** during execution (threaded)
-- Live statistics displayed for both agents
-- Progress through all matches
-- "Running..." status indicator
+**Cách 1:** Tải từ Lichess Database (khuyến nghị)
+```bash
+# Tải file từ https://database.lichess.org/
+# Đặt file .pgn.zst vào data/pgn/
 
-### Viewing Tournament Results
-
-After a tournament completes, you'll see:
-- Total matches played
-- Time taken
-- Complete statistics for both agents (wins, win rate, losses)
-- A colored progress bar showing win/draw/loss distribution
-
-### Replaying Past Tournaments
-
-1. Click "Replay Tournament" from the main menu
-2. Select a tournament from the scrollable list
-3. View the tournament summary and statistics
-4. Select a specific game to replay (winner/draw shown in list)
-5. Use the controls to navigate through the game:
-
-**Mouse Controls:**
-- **Speed Slider** (left): Adjust playback speed (0.5x - 5.0x)
-- **◄ Prev**: Go to previous move
-- **▶ Play** / **⏸ Pause**: Auto-play the game (button changes dynamically)
-- **► Next**: Go to next move
-
-**Keyboard Shortcuts** (with visual icons):
-- **← →** : Previous/Next move
-- **Space**: Play/Pause toggle
-- **↑ ↓** (or **+** / **-**): Increase/Decrease speed
-
-**Visual Features:**
-- Move highlighting: Yellow overlay shows start/end squares and path
-- Turn indicator: Colored text (blue for white, red for black)
-- Game end display: "Checkmate!" (green) or "Draw!" (orange) at final move
-
-## Tournament Data Structure
-
-Tournaments are saved in the `tournaments/` directory with the following structure:
-
-```
-tournaments/
-└── tournament_name_timestamp/
-    ├── result.txt              # Tournament summary
-    ├── game1_Minimax.txt      # First game (Minimax won)
-    ├── game2_draw.txt         # Second game (draw)
-    ├── game3_Random.txt       # Third game (Random won)
-    └── ...
+# Giải nén bằng Python
+python -c "from ml.data_processor import decompress_zst_file; decompress_zst_file('data/pgn/FILE.pgn.zst', 'data/pgn/lichess_games.pgn')"
 ```
 
-**File Naming:**
-- Format: `game{number}_{winner}.txt`
-- Winner is the agent name or "draw"
-- Numbering starts from 1
+**Cách 2:** Tải từ Lichess API (nhanh hơn, ít data hơn)
+```bash
+python ml/train.py --use-api --max-games 3000
+```
 
-**Each game file contains:**
-- Result (winner or draw)
-- White and Black player names
-- **Moves (UCI)**: Standard chess notation (e.g., "e2e4", "g1f3")
-- **Moves (FEN)**: Complete board states for each position
+### Bước 2: Training
 
-## AI Agent Details
+```bash
+# Training với file PGN local
+python ml/train.py --pgn data/pgn/lichess_games.pgn --max-games 15000 --min-elo 1800 --epochs 50
 
-### Random Agent
-- Makes completely random moves from all legal options
-- Fast execution
-- Useful as a baseline for testing other agents
+# Các options khác
+python ml/train.py --help
+```
 
-### Minimax Agent
-- Implements minimax algorithm with **alpha-beta pruning**
-- **Configurable depth** (default: 3 ply)
-- **Proper evaluation** from White's perspective:
-  - White maximizes score, Black minimizes score
-  - Fixed alpha-beta pruning logic for optimal play
-- Material-based evaluation:
-  - Pawn: 100
-  - Knight: 320
-  - Bishop: 330
-  - Rook: 500
-  - Queen: 900
-  - King: 20000
+### Kết quả Training
 
-### ML Agent
-- Advanced heuristic-based position evaluation
-- Considers multiple strategic factors:
-  - **Material count**: Traditional piece values
-  - **Piece mobility**: Number of legal moves available
-  - **Center control**: Bonus for pieces in central squares (e4, e5, d4, d5)
-  - **King safety**: Evaluates king position in opening/middlegame
-- **Exploration factor**: Adds randomness for variety (temperature = 0.3)
-- **Proper perspective handling**: Always evaluates from White's viewpoint
-- More sophisticated strategic play than pure minimax
+| Model | Samples | Accuracy | Thời gian |
+|-------|---------|----------|-----------|
+| SimpleModel | 563K | 55.5% | ~2 phút |
+| **ChessNet** | 563K | **90.5%** | ~15 phút |
 
-## License
+---
 
-This project is provided as-is for educational purposes.
+## 📊 Kết quả đánh giá
+
+### Minimax vs Random (100 trận)
+
+| Metric | Kết quả | Yêu cầu |
+|--------|---------|---------|
+| Win rate | ~95% | ≥ 90% ✅ |
+
+### ML vs Random (100 trận)
+
+| Metric | Kết quả | Yêu cầu |
+|--------|---------|---------|
+| Win rate | ~75% | ≥ 60% ✅ |
+
+---
+
+## 🧠 Chi tiết thuật toán
+
+### 1. Minimax Agent
+
+```
+Thuật toán: Minimax với Alpha-Beta Pruning
+Độ sâu: 3 ply
+Hàm đánh giá: Material-based
+  - Tốt: 100, Mã: 320, Tượng: 330
+  - Xe: 500, Hậu: 900, Vua: 20000
+```
+
+### 2. ML Agent
+
+```
+Model: Fully Connected Neural Network
+Architecture: 773 → 1024 → 512 → 256 → 128 → 1
+Input: Board state (773 features)
+  - 768: Piece positions (12 types × 64 squares)
+  - 1: Turn
+  - 4: Castling rights
+Output: Win probability [0, 1]
+Training data: 563,284 positions từ Lichess (Elo ≥ 1800)
+Framework: PyTorch
+```
+
+---
+
+## 📁 Dữ liệu Lichess
+
+Dữ liệu được lấy từ [Lichess Database](https://database.lichess.org/):
+- **File sử dụng:** `lichess_db_standard_rated_2015-07.pgn.zst`
+- **Kích thước:** ~460MB (nén) → 2.5GB (giải nén)
+- **Số games xử lý:** 15,000 (filtered Elo ≥ 1800)
+- **Số positions:** 563,284
+
+---
+
+## 🎮 Hướng dẫn sử dụng
+
+### Tạo giải đấu mới
+
+1. Click **"New Tournament"**
+2. Chọn **Agent 1** và **Agent 2**
+3. Nhập số trận đấu
+4. Click **"Start"**
+
+### Xem lại ván đấu
+
+1. Click **"Replay Tournament"**
+2. Chọn giải đấu từ danh sách
+3. Chọn ván đấu cụ thể
+4. Sử dụng controls để xem từng nước
+
+### Phím tắt (Replay)
+
+| Phím | Chức năng |
+|------|-----------|
+| `←` `→` | Nước trước/sau |
+| `Space` | Play/Pause |
+| `↑` `↓` | Tăng/giảm tốc độ |
+
+---
+
+## 📝 Requirements
+
+```
+pygame>=2.6.0
+python-chess>=1.9.0
+numpy>=1.24.0
+torch>=2.0.0
+requests>=2.28.0
+zstandard>=0.21.0
+```
+
+---
+
+## 👥 Thành viên nhóm
+
+| MSSV | Họ và Tên |
+|------|-----------|
+| | |
+| | |
+| | |
+
+---
+
+## 📚 Tài liệu tham khảo
+
+1. Russell, S., & Norvig, P. - *Artificial Intelligence: A Modern Approach*
+2. [Lichess Database](https://database.lichess.org/)
+3. [python-chess Documentation](https://python-chess.readthedocs.io/)
+4. [PyTorch Documentation](https://pytorch.org/docs/)
+
+---
+
+## 📄 License
+
+Dự án này được thực hiện cho mục đích học tập tại HCMUT.
