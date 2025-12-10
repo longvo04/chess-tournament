@@ -2,6 +2,9 @@
 __pycache__/
 venv/
 
+#ML models
+ml_models/
+
 # Tournament data
 tournaments/
 
